@@ -31,7 +31,7 @@ var typeNames = []string{"NumberLiteral",
 
 // used to allow funtions to be passed into traverse function to determine
 //how each type of node should be transformed when added to the new AST
-type ASTFunction func(ASTNode, ASTNode)
+type ASTFunction func(ASTNode, ASTNode, AST)
 type ASTMethods map[string]ASTFunction
 
 func contains(slice []string, targetValue string) bool {
@@ -250,15 +250,45 @@ func traverseArray(nodes []ASTNode, parent ASTNode, methods ASTMethods) {
 	}
 }
 
-// transform tree into new AST
-func transform() {
 
+func NumberLiteralTraverse(node ASTNode, parent ASTNode, newTree AST){
+	newNode := ASTNode{
+		typeName: "NumberLiteral", 
+		value: node.value, 
+	}
+
+	newTree.body = append(newTree.body, newNode)
 }
+
+func WordOperatorTraverse(node ASTNode, parent ASTNode, newTree AST){
+	newNode := ASTNode{
+		typeName: "WordOperator", 
+		value: node.value, 
+	}
+
+	newTree.body = append(newTree.body, newNode)
+}
+
+
+func CallExpressionTraverse(node ASTNode, parent ASTNode, tree AST){
+	
+}
+
+// transform tree into new AST
+func transform(tree AST) {
+	methods := map[string]ASTFunction{
+		"NumberLiteral":  NumberLiteralTraverse,
+		"WordOperator": WordOperatorTraverse,
+		"CallExpression": CallExpressionTraverse,
+	}
+}
+
 
 // generate code in new language from transformed AST
 func generateCode() {
 
 }
+
 
 func main() {
 	expression := "(123 234 456) add (123)"
